@@ -1,0 +1,59 @@
+h1 {
+	text-align: center;
+}
+
+#button {
+   position:fixed;
+   border: none;
+   color: white;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+   margin: 4px 2px;
+   cursor: pointer;
+   border-radius: 50%;
+   background-color: #4B403E;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+
+.buttonAdd, .buttonLess {
+    	border: none;
+    	color: white;
+    	text-align: center;
+    	text-decoration: none;
+    	display: inline-block;
+    	margin: 4px 2px;
+    	cursor: pointer;
+    	border-radius: 50%;
+}
+
+.buttonAdd {
+	float: right;
+	background-color: #4CAF50; /* Green */
+}
+
+.buttonLess {
+	background-color: red;
+}

@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"xml:lang="fr"lang="fr">
+    <head>
+        <title>Ajout cv</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Language" content="fr"/>
+        <link href="../resources/CSS/form.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <input type="button" id="buttonBack" value="<" OnClick="back();"/>
+        <h1>Ajout d'un CV</h1>
+        <form method="post" name="addForm" id="addForm" >
+            <fieldset>
+                <legend>Comment souhaitez-vous ajouter votre CV ?</legend>
+                <input type="radio" name="keying" value="file" onchange="changeForm();"/>
+                <label>par fichier CV</label>
+                <input type="radio" name="keying" value="manual" onchange="changeForm();"/>
+                <label>saisie manuelle</label>
+            </fieldset>
+            <script>
+                var form = document.getElementById('addForm');
+                form.action = sessionStorage.getItem('url') + "/insert";
+                function back() {
+                    window.location.href="./menu.html";
+                }
+                function changeForm() {
+                    var file = document.getElementById('file');
+                    var formDiv = document.getElementById('form');
+                    if (form.keying[1].checked == true) {
+                    	formDiv.style.display = '';
+                    	file.style.display = 'none';
+                    } else {
+                    	formDiv.style.display = 'none';
+                    	file.style.display = '';
+                    }
+                }
+                var expe = 0;
+                function moreExpe() {
+                    expe++;
+                    var newExpe = document.getElementById('expe').cloneNode(true);
+                    newExpe.id = 'expe'+expe;
+                    newExpe.style.display = 'block';
+                    for (var i = 0; i < newExpe.length; i++) {
+                        var theName = newExpe[i].name;
+                        if (theName) {
+                            newExpe[i].name = theName + expe;
+                        }
+                    }
+                    var insertHere = document.getElementById('expe').parentNode;
+                    insertHere.insertBefore(newExpe, null);
+                }
+                var dipl = 0;
+                function moreDipl() {
+                    dipl++;
+                    var newDipl = document.getElementById('dipl').cloneNode(true);
+                    newDipl.id = 'dipl'+dipl;
+                    newDipl.style.display = 'block';
+                    for (var i = 0; i < newDipl.length; i++) {
+                        var theName = newDipl[i].name;
+                        if (theName) {
+                            newDipl[i].name = theName + dipl;
+                        }
+                    }
+                    var insertHere = document.getElementById('dipl').parentNode;
+                    insertHere.insertBefore(newDipl, null);
+                }
+                var cert = 0;
+                function moreCert() {
+                    cert++;
+                    var newCert = document.getElementById('cert').cloneNode(true);
+                    newCert.id = 'cert'+cert;
+                    newCert.style.display = 'block';
+                    for (var i = 0; i < newCert.length; i++) {
+                        var theName = newCert[i].name;
+                        if (theName) {
+                            newCert[i].name = theName + dipl;
+                        }
+                    }
+                    var insertHere = document.getElementById('cert').parentNode;
+                    insertHere.insertBefore(newCert, null);
+                }
+                var lv = 0;
+                function moreLv() {
+                    lv++;
+                    var newLv = document.getElementById('lv').cloneNode(true);
+                    newLv.id = 'lv'+lv;
+                    newLv.style.display = 'block';
+                    for (var i = 0; i < newLv.length; i++) {
+                        var theName = newLv[i].name;
+                        if (theName) {
+                            newLv[i].name = theName + lv;
+                        }
+                    }
+                    var insertHere = document.getElementById('lv').parentNode;
+                    insertHere.insertBefore(newLv, null);
+                }
+                var li = 0;
+                function moreLi() {
+                    li++;
+                    var newLi = document.getElementById('li').cloneNode(true);
+                    newLi.id = 'li'+li;
+                    newLi.style.display = 'block';
+                    for (var i = 0; i < newLi.length; i++) {
+                        var theName = newLi[i].name;
+                        if (theName) {
+                            newLi[i].name = theName + li;
+                        }
+                    }
+                    var insertHere = document.getElementById('li').parentNode;
+                    insertHere.insertBefore(newLi, null);
+                }
+                var div = 0;
+                function moreDiv() {
+                    div++;
+                    var newDiv = document.getElementById('div').cloneNode(true);
+                    newDiv.id = 'div'+div;
+                    newDiv.style.display = 'block';
+                    for (var i = 0; i < newDiv.length; i++) {
+                        var theName = newDiv[i].name;
+                        if (theName) {
+                            newDiv[i].name = theName + Div;
+                        }
+                    }
+                    var insertHere = document.getElementById('div').parentNode;
+                    insertHere.insertBefore(newDiv, null);
+                }
+                function verifDate(champ) {
+	                if (champ.value == "") {
+                        champ.value = "yyyy-mm-jj";
+					}
+				}
+				function verifDescrip(champ) {
+					if (champ.value == "") {
+						champ.value = "yyyy-mm-jj";
+					}
+				}
+            </script>
+            <div id="form" style="display:none">
+                <h2>Identité</h2>
+                <p>
+                    <label>Nom : </label><input type="text" name="lastName" size="35"/>
+                    <label>Prénom : </label><input type="text" name="firstName" size="35"/>
+                </p>
+                <h2>Objectif</h2>
+                <p>
+                    <select name="obj">
+                        <option value="stage">stage</option>
+                        <option value="emploi">emploi</option>
+                    </select>
+                    <input type="text"name="descript" placeholder="intitulé du stage / désignation du poste demandé" size="100"/>
+                </p>
+                <div name="prof"id="prof">
+                    <h2>Expérience(s) professionelle(s)<input type="button" class="buttonAdd" value="+" onclick="moreExpe();"></h2>
+                    <div name="expe" id="expe" style="display:none" class="expe">
+                        <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
+                        <p>
+                            <label>Date début : </label><input type="date" name="dateDebExp" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                            <label>Date fin : </label><input type="date" name="dateFinExp" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                        </p>
+                        <p>
+                            <textarea rows="4" placeholder="description de l'expérience..." name="decribeExp">
+                            </textarea>
+                        </p>
+                    </div>
+                </div>
+                <h2>Compétences</h2>
+                <fieldset>
+                    <legend>Diplôme(s)<input type="button" class="buttonAdd" value="+" onclick="moreDipl();"></legend>
+                    <div name="comp1" id="comp1">
+                        <div name="dipl" id="dipl" style="display:none" class="dipl">
+                            <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
+                            <p>
+                                <label>Niveau : </label>
+                                <select name="nvDip">
+                                    <option value="V">CAP, BEP, BEPC</option>
+                                    <option value="IV">Bac, Brevet professionnel</option>
+                                    <option value="III">BTS, DUT</option>
+                                    <option value="II">Bac+3 (licence), Bac+4 (Master)</option>
+                                    <option value="I">Master, Diplôme ingénieur, Doctorat</option>
+
+                                </select>
+                                <label>Date d'obtention : </label><input type="date" name="dateDip" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                            </p>
+                            <p>
+                                <label>Intitulé du diplôme : </label><input type="text" name="describeDip" size="100"/>
+                            <p>
+                                <label>Etablissement : </label><input type="text" name="institutDip" size="100"/>
+                            </p>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Certification(s)<input type="button" class="buttonAdd" value="+" onclick="moreCert();"/></legend>
+                    <div name="comp1" id="comp2">
+                        <div name="cert" id="cert" style="display:none" class="cert">
+                            <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
+                            <p>
+                                <label>Date début : </label><input type="date" name="dateDebCert" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                                <label>Date fin : </label><input type="date" name="dateFinCert" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                            </p>
+                            <p>
+                                <textarea rows="4" placeholder="description de la formation..." name="describeCert">
+                                </textarea>
+                            </p>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Langue(s) vivante(s)<input type="button" class="buttonAdd" value="+" onclick="moreLv();"/></legend>
+                    <div name="comp3" id="comp3">
+                        <div name="lv" id="lv" style="display:none" class="lv">
+                            <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
+                            <p>
+                                <label>Code iso : </label><input type="text" name="iso" size="5"/>
+                                <label>Certification : </label><input type="text" name="cert" placeholder="CLES"/>
+                            </p>
+                            <p>
+                                <label>Niveau : </label>
+                                <select name="nivs">
+                                    <option value="A1">A1</option>
+                                    <option value="A2">A2</option>
+                                    <option value="B1">B1</option>
+                                    <option value="B2">B2</option>
+                                    <option value="C1">C1</option>
+                                    <option value="C2">C2</option>
+
+                                </select>
+                                <label> ou </label>
+                                <input type="number" name="nivi"/>
+                            </p>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Langage(s) informatique(s)<input type="button" class="buttonAdd" value="+" onclick="moreLi();"/></legend>
+                    <div name="comp4" id="comp4">
+                        <div name="li" id="li" style="display:none" class="li">
+                            <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
+                            <p>
+                                <label>Nom : </label><input type="text" name="nameLi" size="100"/>
+                                <label>Niveau : </label><input type="number" name="nvLi"/>
+                            </p>
+                        </div>
+                    </div>
+                </fieldset>
+                <div name="divs" id="divs">
+                    <h2>Divers<input type="button" value="+" class="buttonAdd" onclick="moreDiv();"/></h2>
+                        <div name="div" id="div" style="display:none" class="div">
+                            <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
+                            <p>
+                                <textarea rows="2" placeholder="informations complémentaires..." name="describeDiv"></textarea>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <div id="file" style="display:none">
+                <br/>
+                <label>Sélectionner le fichier à envoyer</label>
+                <input type="file" name="file">
+                <br/>
+            </div>
+            <br/>
+        <input type="submit" value="Ajouter le CV"/>
+    </form>
+</body>
+</html>

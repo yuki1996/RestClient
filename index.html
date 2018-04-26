@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+
+  <head>
+    <title>RestClient</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Language" content="fr" />
+    <link href="./resources/CSS/form.css" rel="stylesheet" />
+  </head>
+  <body>
+	  <script>
+
+      function changeForm() {
+          var url = document.getElementById('url').value;
+          document.body.innerHTML = "";
+          sessionStorage.setItem('url', url);
+          document.location.replace('./src/menu.html');
+      }
+	  </script>
+	  <h1>Configuration du servieur REST</h1>
+	  <form id="form" method="post">
+		  <label>URL du serveur : </label>
+		  <input type="text" name="URL" placeholder="http://localhost:8080/restcvi" required id="url" size="100">
+		  <input type="submit" value="VALIDER" id="valider" onclick="changeForm();">
+	  </form>
+  </body>
+</html>

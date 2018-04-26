@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"xml:lang="fr"lang="fr">
+    <head>
+        <title>Ajout cv</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Language" content="fr"/>
+        <link href="../resources/CSS/list.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <input type="button" id="button" value="<" OnClick="back();"/>
+        <h1>Liste des CVs</h1>
+        <input type="button" class="buttonAdd" value="+" onclick="add();" />
+        <script>
+            var xhttp = new XMLHttpRequest();
+            var url = sessionStorage.getItem('url');
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                myFunction(this);
+                }
+            };
+            xhttp.open("GET", url + "/resume", true);
+            xhttp.setRequestHeader('Content-Type', 'application/xml');
+            xhttp.send();
+
+            function back() {
+                window.location.href="./menu.html";
+            }
+
+            function add() {
+                window.location.href="./addForm.html";
+            }
+
+            function PromptMessage() {
+                var id= prompt("Saisissez l'identifiant :", "1");
+                window.location.href=sessionStorage.getItem('url') + "/resume/"+ id;
+            }
+
+            function myFunction(xml) {
+                var xmlDoc = xml.responseXML;
+                var string = "<table>" +
+                                "<thead>" +
+                                    "<tr>" +
+                                        "<th>Identifiant</th>" +
+                                        "<th>Nom</th>" +
+                                        "<th>Prénom</th>" +
+                                        "<th>Objectif</th>" +
+                                        "<th>Actions</th>" +
+                                    "</tr>" +
+                                "</thead>" +
+                                "<tbody>";
+
+                if (xmlDoc.getElementsByTagName("error").length == 0) {
+                        var length = xmlDoc.getElementsByTagName("id").length;
+                        for (var i = 0; i < length; i++) {
+                            var id = xmlDoc.getElementsByTagName("id")[i].childNodes[0].nodeValue;
+                            var lastName = xmlDoc.getElementsByTagName("nom")[i].childNodes[0].nodeValue;
+                            var firstName = xmlDoc.getElementsByTagName("prenom")[i].childNodes[0].nodeValue;
+                            var obj = xmlDoc.getElementsByTagName("objectif")[i].childNodes[0].nodeValue;
+                            string += "<tr>" +
+                                        "<td>" + id + "</td>" +
+                                        "<td>" + lastName + "</td>" +
+                                        "<td>" + firstName + "</td>" +
+                                        "<td>" + obj + "</td>" +
+                                        "<td>" +
+                                            "<button onclick=\"PromptMessage();\"><img src=\"../resources/images/loupe.png\"/></button>"+
+                                            "<a href=\"./addForm.html\"><img src=\"../resources/images/edit.png\"/></a> " +
+                                            "<a href=\"./addForm.html\"><input type=\"button\" class=\"buttonLess\" value=\"x\" /></a>" +
+                                        "</td>" +
+                                    "</tr>";
+                        }
+                }
+                string += "</tbody>" +
+                            "</table>";
+                document.body.innerHTML += string;
+            }
+        </script>
+    </body>
+</html>
