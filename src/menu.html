@@ -8,6 +8,12 @@
     </head>
     <body>
         <h1>Menu</h1>
+        <script>
+            var url = sessionStorage.getItem('url');
+            if (url == null) {
+                window.location.href="../index.html";
+            }
+        </script>
         <div class="menu">
           <a href="./listCV.html">Liste des CVs</a>
           <a href="./addForm.html">Ajout d'un CV</a>

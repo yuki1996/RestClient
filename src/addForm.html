@@ -19,7 +19,11 @@
             </fieldset>
             <script>
                 var form = document.getElementById('addForm');
-                form.action = sessionStorage.getItem('url') + "/insert";
+                var url = sessionStorage.getItem('url');
+                if (url == null) {
+                    window.location.href="../index.html";
+                }
+                form.action = url + "/insert";
                 function back() {
                     window.location.href="./menu.html";
                 }
@@ -46,6 +50,10 @@
                             newExpe[i].name = theName + expe;
                         }
                     }
+                    //dateDebExp mis en required
+                    newExpe.children[1].children[1].setAttribute("required", "required");
+                    //describeExp mis en required
+                    newExpe.children[2].children[0].setAttribute("required", "required");
                     var insertHere = document.getElementById('expe').parentNode;
                     insertHere.insertBefore(newExpe, null);
                 }
@@ -61,6 +69,12 @@
                             newDipl[i].name = theName + dipl;
                         }
                     }
+                    //dateDip mis en required
+                    newDipl.children[1].children[3].setAttribute("required", "required");
+                    //describeDip mis en required
+                    newDipl.children[2].children[1].setAttribute("required", "required");
+                    //institutDip mis en required
+                    newDipl.children[3].children[1].setAttribute("required", "required");
                     var insertHere = document.getElementById('dipl').parentNode;
                     insertHere.insertBefore(newDipl, null);
                 }
@@ -76,6 +90,10 @@
                             newCert[i].name = theName + dipl;
                         }
                     }
+                    //dateDebCert mis en required
+                    newCert.children[1].children[1].setAttribute("required", "required");
+                    //describeCert mis en required
+                    newCert.children[2].children[0].setAttribute("required", "required");
                     var insertHere = document.getElementById('cert').parentNode;
                     insertHere.insertBefore(newCert, null);
                 }
@@ -91,6 +109,10 @@
                             newLv[i].name = theName + lv;
                         }
                     }
+                    //iso mis en required
+                    newLv.children[1].children[1].setAttribute("required", "required");
+                    //cert mis en required
+                    newLv.children[1].children[3].setAttribute("required", "required");
                     var insertHere = document.getElementById('lv').parentNode;
                     insertHere.insertBefore(newLv, null);
                 }
@@ -106,6 +128,11 @@
                             newLi[i].name = theName + li;
                         }
                     }
+                    //nameLi mis en required
+                    newLi.children[1].children[1].setAttribute("required", "required");
+                    //nvLi mis en required
+                    newLi.children[1].children[3].setAttribute("required", "required");
+
                     var insertHere = document.getElementById('li').parentNode;
                     insertHere.insertBefore(newLi, null);
                 }
@@ -121,6 +148,8 @@
                             newDiv[i].name = theName + Div;
                         }
                     }
+                    //describeDiv mis en required
+                    newDiv.children[1].children[0].setAttribute("required", "required");
                     var insertHere = document.getElementById('div').parentNode;
                     insertHere.insertBefore(newDiv, null);
                 }
@@ -138,8 +167,8 @@
             <div id="form" style="display:none">
                 <h2>Identité</h2>
                 <p>
-                    <label>Nom : </label><input type="text" name="lastName" size="35"/>
-                    <label>Prénom : </label><input type="text" name="firstName" size="35"/>
+                    <label>Nom : </label><input type="text" name="lastName" size="35" required/>
+                    <label>Prénom : </label><input type="text" name="firstName" size="35" required/>
                 </p>
                 <h2>Objectif</h2>
                 <p>
@@ -147,19 +176,18 @@
                         <option value="stage">stage</option>
                         <option value="emploi">emploi</option>
                     </select>
-                    <input type="text"name="descript" placeholder="intitulé du stage / désignation du poste demandé" size="100"/>
+                    <input type="text"name="descript" placeholder="intitulé du stage / désignation du poste demandé" size="100" required/>
                 </p>
                 <div name="prof"id="prof">
                     <h2>Expérience(s) professionelle(s)<input type="button" class="buttonAdd" value="+" onclick="moreExpe();"></h2>
                     <div name="expe" id="expe" style="display:none" class="expe">
                         <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                         <p>
-                            <label>Date début : </label><input type="date" name="dateDebExp" value="yyyy-mm-dd" onblur="verifDate(this)"/>
-                            <label>Date fin : </label><input type="date" name="dateFinExp" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                            <label>Date début : </label><input type="date" name="dateDebExp" value="yyyy-MM-dd" onblur="verifDate(this)"/>
+                            <label>Date fin : </label><input type="date" name="dateFinExp" value="yyyy-MM-dd" onblur="verifDate(this)"/>
                         </p>
                         <p>
-                            <textarea rows="4" placeholder="description de l'expérience..." name="decribeExp">
-                            </textarea>
+                            <textarea rows="4" placeholder="description de l'expérience..." name="decribeExp"></textarea>
                         </p>
                     </div>
                 </div>
@@ -179,7 +207,7 @@
                                     <option value="I">Master, Diplôme ingénieur, Doctorat</option>
 
                                 </select>
-                                <label>Date d'obtention : </label><input type="date" name="dateDip" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                                <label>Date d'obtention : </label><input type="date" name="dateDip" value="yyyy-MM-dd" onblur="verifDate(this)"/>
                             </p>
                             <p>
                                 <label>Intitulé du diplôme : </label><input type="text" name="describeDip" size="100"/>
@@ -195,12 +223,11 @@
                         <div name="cert" id="cert" style="display:none" class="cert">
                             <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                             <p>
-                                <label>Date début : </label><input type="date" name="dateDebCert" value="yyyy-mm-dd" onblur="verifDate(this)"/>
-                                <label>Date fin : </label><input type="date" name="dateFinCert" value="yyyy-mm-dd" onblur="verifDate(this)"/>
+                                <label>Date début : </label><input type="date" name="dateDebCert" value="yyyy-MM-dd" onblur="verifDate(this)"/>
+                                <label>Date fin : </label><input type="date" name="dateFinCert" value="yyyy-MM-dd" onblur="verifDate(this)"/>
                             </p>
                             <p>
-                                <textarea rows="4" placeholder="description de la formation..." name="describeCert">
-                                </textarea>
+                                <textarea rows="4" placeholder="description de la formation..." name="describeCert"></textarea>
                             </p>
                         </div>
                     </div>
