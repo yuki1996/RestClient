@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"xml:lang="fr"lang="fr">
     <head>
-        <title>Ajout cv</title>
+        <title>Liste des CVs</title>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Language" content="fr"/>
         <link href="../resources/CSS/list.css" rel="stylesheet"/>
@@ -15,7 +15,9 @@
             var url = sessionStorage.getItem('url');
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                myFunction(this);
+                    myFunction(this);
+                } else {
+                    //document.body.innerHTML = "<h2> Erreur de connexion vers le serveur : " + this.status + "</h2>";
                 }
             };
             xhttp.open("GET", url + "/resume", true);
@@ -23,54 +25,79 @@
             xhttp.send();
 
             function back() {
+                sessionStorage.clear();
+                sessionStorage.setItem('url', url);
                 window.location.href="./menu.html";
             }
 
             function add() {
+                sessionStorage.clear();
+                sessionStorage.setItem('url', url);
                 window.location.href="./addForm.html";
             }
 
-            function PromptMessage() {
-                var id= prompt("Saisissez l'identifiant :", "1");
-                window.location.href=sessionStorage.getItem('url') + "/resume/"+ id;
+            function resume(id) {
+                sessionStorage.setItem('id', id);
+                window.location.href="./resumeCV.html";
+            }
+
+            function deleteCV(id) {
+                var r = confirm("Êtes-vous sûr de vouloir supprimer ce CV ?");
+                if (r == true) {
+                    var xhttp = new XMLHttpRequest();
+                    url = sessionStorage.getItem('url');
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            location.reload();
+                        }
+                    };
+                    xhttp.open("GET", url + "/delete/"+ id, true);
+                    xhttp.send();
+                }
+            }
+
+            function update(id) {
             }
 
             function myFunction(xml) {
                 var xmlDoc = xml.responseXML;
-                var string = "<table>" +
-                                "<thead>" +
-                                    "<tr>" +
-                                        "<th>Identifiant</th>" +
-                                        "<th>Nom</th>" +
-                                        "<th>Prénom</th>" +
-                                        "<th>Objectif</th>" +
-                                        "<th>Actions</th>" +
-                                    "</tr>" +
-                                "</thead>" +
-                                "<tbody>";
-
+                var string = "";
                 if (xmlDoc.getElementsByTagName("error").length == 0) {
+                    string = "<table>" +
+                                    "<thead>" +
+                                        "<tr>" +
+                                            "<th>Identifiant</th>" +
+                                            "<th>Nom</th>" +
+                                            "<th>Prénom</th>" +
+                                            "<th>Objectif</th>" +
+                                            "<th>Actions</th>" +
+                                        "</tr>" +
+                                    "</thead>" +
+                                    "<tbody>";
                         var length = xmlDoc.getElementsByTagName("id").length;
                         for (var i = 0; i < length; i++) {
                             var id = xmlDoc.getElementsByTagName("id")[i].childNodes[0].nodeValue;
                             var lastName = xmlDoc.getElementsByTagName("nom")[i].childNodes[0].nodeValue;
                             var firstName = xmlDoc.getElementsByTagName("prenom")[i].childNodes[0].nodeValue;
-                            var obj = xmlDoc.getElementsByTagName("objectif")[i].childNodes[0].nodeValue;
+                            var obj = xmlDoc.getElementsByTagName("objectif")[i].childNodes[0].nodeName;
                             string += "<tr>" +
                                         "<td>" + id + "</td>" +
                                         "<td>" + lastName + "</td>" +
                                         "<td>" + firstName + "</td>" +
                                         "<td>" + obj + "</td>" +
                                         "<td>" +
-                                            "<button onclick=\"PromptMessage();\"><img src=\"../resources/images/loupe.png\"/></button>"+
-                                            "<a href=\"./addForm.html\"><img src=\"../resources/images/edit.png\"/></a> " +
-                                            "<a href=\"./addForm.html\"><input type=\"button\" class=\"buttonLess\" value=\"x\" /></a>" +
+                                            "<button onclick=\"resume("+id+");\" id=\"resume\"><img src=\"../resources/images/loupe.png\"/></button>"+
+                                            "<button onclick=\"PromptMessage();\" id=\"edit\"><img src=\"../resources/images/edit.png\"/></button> " +
+                                            "<input type=\"button\" class=\"buttonLess\" value=\"x\" onclick=\"deleteCV("+id+");\" />" +
                                         "</td>" +
                                     "</tr>";
                         }
+                        string += "</tbody>" +
+                                    "</table>";
+                } else {
+                    string = "<p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
                 }
-                string += "</tbody>" +
-                            "</table>";
+
                 document.body.innerHTML += string;
             }
         </script>

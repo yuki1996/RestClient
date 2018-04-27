@@ -13,6 +13,12 @@ h1 {
    cursor: pointer;
    border-radius: 50%;
    background-color: #4B403E;
+   font-size: 25px;
+}
+
+#resume, #edit {
+		background: white;
+		border: none;
 }
 
 table {
@@ -25,15 +31,27 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-child(even){background-color: #f2f2f2;}
+tr:nth-child(even){
+	background-color: #f2f2f2;
+}
 
-tr:hover {background-color: #ddd;}
+tr:hover #resume, tr:hover #edit {
+	background-color: #ddd;
+}
+
+tr:nth-child(even) #resume,tr:nth-child(even) #edit {
+	background-color: #f2f2f2;
+}
+
+tr:hover {
+	background-color: #ddd;
+}
 
 th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #4CAF50;
+    background-color: grey;
     color: white;
 }
 
@@ -51,9 +69,11 @@ th {
 
 .buttonAdd {
 	float: right;
-	background-color: #4CAF50; /* Green */
+	background-color: #4CAF50;
+    font-size: 25px;
 }
 
 .buttonLess {
 	background-color: red;
+	font-size: 20px;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"xml:lang="fr"lang="fr">
     <head>
-        <title>Ajout cv</title>
+        <title>Menu</title>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Language" content="fr"/>
         <link href="../resources/CSS/menu.css" rel="stylesheet" />
@@ -13,13 +13,69 @@
             if (url == null) {
                 window.location.href="../index.html";
             }
+            function saisie(action) {
+                var id = prompt("Saisissez l'identifiant :", "");
+                if (id != null) {
+                    switch (action) {
+                        case "resume" :
+                            var xhttp = new XMLHttpRequest();
+                            url = sessionStorage.getItem('url');
+                            xhttp.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    resumeCV(this, id);
+                                }
+                            };
+                            xhttp.open("GET", url + "/resume/"+ id, true);
+                            xhttp.send();
+                        break;
+                        case "delete" :
+                            var r = confirm("Êtes-vous sûr de vouloir supprimer ce CV ?");
+                            if (r == true) {
+                                var xhttp = new XMLHttpRequest();
+                                url = sessionStorage.getItem('url');
+                                xhttp.onreadystatechange = function() {
+                                    if (this.readyState == 4 && this.status == 200) {
+                                        deleteCV(this);
+                                    }
+                                };
+                                xhttp.open("GET", url + "/delete/"+ id, true);
+                                xhttp.send();
+                            }
+                        break;
+                        default:
+                        break;
+                    }
+                }
+            }
+
+
+            function resumeCV(xml, id) {
+                var xmlDoc = xml.responseXML;
+                if (xmlDoc.getElementsByTagName("error").length == 0) {
+                    sessionStorage.setItem('id', id);
+                    window.location.href="./resumeCV.html";
+                } else {
+                    var string = "<p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
+                    document.body.innerHTML = string;
+                }
+            }
+
+            function deleteCV(xml) {
+                var xmlDoc = xml.responseXML;
+                if (xmlDoc.getElementsByTagName("error").length == 0) {
+                    location.reload();
+                } else {
+                    var string = "<p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
+                    document.body.innerHTML = string;
+                }
+            }
         </script>
         <div class="menu">
           <a href="./listCV.html">Liste des CVs</a>
           <a href="./addForm.html">Ajout d'un CV</a>
-          <a href="#">Détail d'un CV</a>
+          <a onclick="saisie('resume');" >Détail d'un CV</a>
           <a href="#">Mise à jour d'un CV</a>
-          <a href="#">Suppression d'un CV</a>
+          <a onclick="saisie('delete');">Suppression d'un CV</a>
         </div>
     </body>
 </html>

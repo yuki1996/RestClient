@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"xml:lang="fr"lang="fr">
+    <head>
+        <title>Affichage du CV</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Language" content="fr"/>
+        <link href="../resources/CSS/list.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <input type="button" id="button" value="<" OnClick="back();"/>
+        <script>
+            var url = sessionStorage.getItem('url');
+            if (url == null) {
+                window.location.href="../index.html";
+            }
+            var id = sessionStorage.getItem('id');
+            if (id == null) {
+                window.location.href="./menu.html";
+            }
+            var xhttp = new XMLHttpRequest();
+            var id = sessionStorage.getItem('id');
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    myFunction(this);
+                } else {
+                    //document.body.innerHTML = "<h2> Erreur de connexion vers le serveur : " + this.status + "</h2>";
+                }
+            };
+            xhttp.open("GET", url + "/resume/" + id, true);
+            xhttp.setRequestHeader('Content-Type', 'application/xml');
+            xhttp.send();
+
+            function back() {
+                sessionStorage.clear();
+                sessionStorage.setItem('url', url);
+                window.location.href="./menu.html";
+            }
+            
+            function myFunction(xml) {
+                var xmlDoc = xml.responseXML;
+                var string = "";
+                if (xmlDoc.getElementsByTagName("error").length == 0) {
+                    var lastName =  xmlDoc.getElementsByTagName("nom")[0].childNodes[0].nodeValue;
+                    var firstName =  xmlDoc.getElementsByTagName("prenom")[0].childNodes[0].nodeValue;
+                    var objType = xmlDoc.getElementsByTagName("objectif")[0].childNodes[0].nodeName;
+                    var obj = xmlDoc.getElementsByTagName("objectif")[0].children[0].childNodes[0].nodeValue;
+                    string += "<h1>" + lastName + " " + firstName + "</h1>"
+                            + "<h2><strong>" + objType + ": </strong> " + obj +"</h2>";
+                } else {
+                    string = "<p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
+                }
+
+                document.body.innerHTML += string;
+            }
+        </script>
+    </body>
+</html>

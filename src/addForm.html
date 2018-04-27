@@ -25,6 +25,8 @@
                 }
                 form.action = url + "/insert";
                 function back() {
+                    sessionStorage.clear();
+                    sessionStorage.setItem('url', url);
                     window.location.href="./menu.html";
                 }
                 function changeForm() {
