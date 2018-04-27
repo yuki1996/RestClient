@@ -1,0 +1,51 @@
+h1 {
+	text-align: center;
+}
+
+h2 {
+    padding-left: 40px;
+}
+
+h4 {
+    padding-left: 20px;
+}
+
+h4  + ul li {
+    list-style-type: none;
+}
+
+#button {
+   position:fixed;
+   border: none;
+   color: white;
+   text-align: center;
+   text-decoration: none;
+   display: inline-block;
+   margin: 4px 2px;
+   cursor: pointer;
+   border-radius: 50%;
+   background-color: #4B403E;
+   font-size: 25px;
+}
+
+#edit {
+	background: white;
+	border: none;
+}
+
+#buttonLess {
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 50%;
+	background-color: red;
+	font-size: 20px;
+}
+
+#edit, #buttonLess {
+	float: right;
+}

@@ -16,9 +16,9 @@ h1 {
    font-size: 25px;
 }
 
-#resume, #edit {
-		background: white;
-		border: none;
+.resume, .edit {
+	background: white;
+	border: none;
 }
 
 table {
@@ -35,11 +35,11 @@ tr:nth-child(even){
 	background-color: #f2f2f2;
 }
 
-tr:hover #resume, tr:hover #edit {
+tr:hover .resume, tr:hover .edit {
 	background-color: #ddd;
 }
 
-tr:nth-child(even) #resume,tr:nth-child(even) #edit {
+tr:nth-child(even) .resume,tr:nth-child(even) .edit {
 	background-color: #f2f2f2;
 }
 
@@ -57,14 +57,14 @@ th {
 
 
 .buttonAdd, .buttonLess {
-    	border: none;
-    	color: white;
-    	text-align: center;
-    	text-decoration: none;
-    	display: inline-block;
-    	margin: 4px 2px;
-    	cursor: pointer;
-    	border-radius: 50%;
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 50%;
 }
 
 .buttonAdd {

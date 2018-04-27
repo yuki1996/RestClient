@@ -4,10 +4,13 @@
         <title>Affichage du CV</title>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Language" content="fr"/>
-        <link href="../resources/CSS/list.css" rel="stylesheet"/>
+        <link href="../resources/CSS/cv.css" rel="stylesheet"/>
     </head>
     <body>
         <input type="button" id="button" value="<" OnClick="back();"/>
+        <input type="button" id="buttonLess" value="x" onclick="deleteCV();" />
+        <button onclick="PromptMessage();" id="edit"><img src="../resources/images/edit.png"/></button>
+
         <script>
             var url = sessionStorage.getItem('url');
             if (url == null) {
@@ -17,6 +20,31 @@
             if (id == null) {
                 window.location.href="./menu.html";
             }
+
+            function deleteCV() {
+                var r = confirm("Êtes-vous sûr de vouloir supprimer ce CV ?");
+                if (r == true) {
+                    var xhttp = new XMLHttpRequest();
+                    url = sessionStorage.getItem('url');
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var cv = document.getElementById("cv");
+                            cv.style.display = 'none';
+                            var edit = document.getElementById("edit");
+                            edit.style.display = 'none';
+                            var deleteCV = document.getElementById("buttonLess");
+                            deleteCV.style.display = 'none';
+                            document.body.innerHTML += "<br/><br/><p> Suppression du cv n°"+ id +"</p>";
+                        }
+                    };
+                    xhttp.open("GET", url + "/delete/"+ id, true);
+                    xhttp.send();
+                }
+            }
+
+            function update() {
+            }
+
             var xhttp = new XMLHttpRequest();
             var id = sessionStorage.getItem('id');
             xhttp.onreadystatechange = function() {
@@ -35,7 +63,7 @@
                 sessionStorage.setItem('url', url);
                 window.location.href="./menu.html";
             }
-            
+
             function myFunction(xml) {
                 var xmlDoc = xml.responseXML;
                 var string = "";
@@ -44,10 +72,85 @@
                     var firstName =  xmlDoc.getElementsByTagName("prenom")[0].childNodes[0].nodeValue;
                     var objType = xmlDoc.getElementsByTagName("objectif")[0].childNodes[0].nodeName;
                     var obj = xmlDoc.getElementsByTagName("objectif")[0].children[0].childNodes[0].nodeValue;
-                    string += "<h1>" + lastName + " " + firstName + "</h1>"
-                            + "<h2><strong>" + objType + ": </strong> " + obj +"</h2>";
+                    string += "<div id=\"cv\"> " +
+                                "<h1>" + lastName + " " + firstName + "</h1>" +
+                                "<h2><strong>" + objType.charAt(0).toUpperCase() + objType.substring(1).toLowerCase() + " : </strong> " + obj +"</h2>";
+                    if (xmlDoc.getElementsByTagName("prof").length > 0) {
+                        string += "<h3>Expérience(s) professionnelle(s)</h3>" +
+                                "<ul>";
+                        for (var i = 0; i < xmlDoc.getElementsByTagName("expe").length; i++) {
+                            var lengthExpe = xmlDoc.getElementsByTagName("expe")[i].childNodes.length;
+                            string += "<li>"+ xmlDoc.getElementsByTagName("expe")[i].childNodes[0].textContent;
+                            if (lengthExpe == 3) {
+                                string += " au " + xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent + " : " +
+                                         xmlDoc.getElementsByTagName("expe")[i].childNodes[2].textContent +
+                                    "</li>";
+                            } else {
+                                string += xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent +
+                                    "</li>";
+                            }
+                        }
+                        string += "</ul>";
+                    }
+                    string += "<h3>Compétences</h3>" +
+                                "<h4>Diplôme(s)</h4>" +
+                                    "<ul>";
+                    for (var i = 0; i < xmlDoc.getElementsByTagName("diplome").length; i++) {
+                        string += "<li> " + xmlDoc.getElementsByTagName("diplome")[i].attributes[0].nodeValue + " " +
+                            xmlDoc.getElementsByTagName("diplome")[i].childNodes[1].textContent + " : " +
+                            xmlDoc.getElementsByTagName("diplome")[i].childNodes[0].textContent + ", " +
+                            xmlDoc.getElementsByTagName("diplome")[i].childNodes[2].textContent + "</li>";
+                    }
+                    string += "</ul>";
+                    if (xmlDoc.getElementsByTagName("certif").length > 0) {
+                        string += "<h4>Certification(s)</h4>" +
+                                "<ul>";
+                        for (var i = 0; i < xmlDoc.getElementsByTagName("certif").length; i++) {
+                            var lengthCert = xmlDoc.getElementsByTagName("certif")[i].childNodes.length;
+                            string += "<li>"+ xmlDoc.getElementsByTagName("certif")[i].childNodes[0].textContent;
+                            if (lengthCert == 3) {
+                                string += " au " + xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent + " : " +
+                                         xmlDoc.getElementsByTagName("certif")[i].childNodes[2].textContent +
+                                    "</li>";
+                            } else {
+                                string += xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent +
+                                    "</li>";
+                            }
+                        }
+                        string += "</ul>";
+                    }
+                    string += "<h4>Langue(s) vivante(s)</h4>" +
+                                "<ul>";
+                    for (var i = 0; i < xmlDoc.getElementsByTagName("lv").length; i++) {
+                        string += "<li> " + xmlDoc.getElementsByTagName("lv")[i].attributes[1].nodeValue + " " +
+                            xmlDoc.getElementsByTagName("lv")[i].attributes[0].nodeValue + " : " +
+                            xmlDoc.getElementsByTagName("lv")[i].attributes[2].nodeValue + "</li>";
+                    }
+                    string += "</ul>";
+                    string += "<h4>Langage(s) programmation</h4>" +
+                            "<ul>";
+                    for (var i = 0; i < xmlDoc.getElementsByTagName("langage").length; i++) {
+                        string += "<li>"+ xmlDoc.getElementsByTagName("langage")[i].childNodes[0].textContent + " : " +
+                                     xmlDoc.getElementsByTagName("langage")[i].childNodes[1].textContent +
+                                "</li>";
+
+                    }
+                    string += "</ul>";
+                    if (xmlDoc.getElementsByTagName("divers").length > 0) {
+                        string += "<h3>Divers</h3>" +
+                                "<ul>";
+                        for (var i = 0; i < xmlDoc.getElementsByTagName("divers").length; i++) {
+                            string += "<li>"+ xmlDoc.getElementsByTagName("divers")[i].childNodes[0].textContent + "</li>";
+                        }
+                        string += "</ul>";
+                    }
+                    string += "</div>";
                 } else {
-                    string = "<p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
+                    var edit = document.getElementById("edit");
+                    edit.style.display = 'none';
+                    var deleteCV = document.getElementById("buttonLess");
+                    deleteCV.style.display = 'none';
+                    string = "<br/><br/><p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
                 }
 
                 document.body.innerHTML += string;

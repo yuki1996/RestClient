@@ -35,7 +35,7 @@
                                 url = sessionStorage.getItem('url');
                                 xhttp.onreadystatechange = function() {
                                     if (this.readyState == 4 && this.status == 200) {
-                                        deleteCV(this);
+                                        deleteCV(this, id);
                                     }
                                 };
                                 xhttp.open("GET", url + "/delete/"+ id, true);
@@ -60,10 +60,10 @@
                 }
             }
 
-            function deleteCV(xml) {
+            function deleteCV(xml, id) {
                 var xmlDoc = xml.responseXML;
                 if (xmlDoc.getElementsByTagName("error").length == 0) {
-                    location.reload();
+                    document.body.innerHTML += "<p> Suppression du cv n°"+ id +"</p";
                 } else {
                     var string = "<p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
                     document.body.innerHTML = string;
