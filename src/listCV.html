@@ -57,6 +57,8 @@
             }
 
             function update(id) {
+                sessionStorage.setItem('id', id);
+                window.location.href="./updateForm.html";
             }
 
             function myFunction(xml) {
@@ -87,7 +89,7 @@
                                         "<td>" + obj + "</td>" +
                                         "<td>" +
                                             "<button onclick=\"resume("+id+");\" class=\"resume\"><img src=\"../resources/images/loupe.png\"/></button>"+
-                                            "<button onclick=\"PromptMessage();\" class=\"edit\"><img src=\"../resources/images/edit.png\"/></button> " +
+                                            "<button onclick=\"update("+id+");\" class=\"edit\"><img src=\"../resources/images/edit.png\"/></button> " +
                                             "<input type=\"button\" class=\"buttonLess\" value=\"x\" onclick=\"deleteCV("+id+");\" />" +
                                         "</td>" +
                                     "</tr>";

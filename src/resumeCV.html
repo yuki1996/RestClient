@@ -9,8 +9,7 @@
     <body>
         <input type="button" id="button" value="<" OnClick="back();"/>
         <input type="button" id="buttonLess" value="x" onclick="deleteCV();" />
-        <button onclick="PromptMessage();" id="edit"><img src="../resources/images/edit.png"/></button>
-
+        <button onclick="update();" id="edit"><img src="../resources/images/edit.png"/></button>
         <script>
             var url = sessionStorage.getItem('url');
             if (url == null) {
@@ -43,6 +42,7 @@
             }
 
             function update() {
+                window.location.href="./updateForm.html";
             }
 
             var xhttp = new XMLHttpRequest();
@@ -74,50 +74,82 @@
                     var obj = xmlDoc.getElementsByTagName("objectif")[0].children[0].childNodes[0].nodeValue;
                     string += "<div id=\"cv\"> " +
                                 "<h1>" + lastName + " " + firstName + "</h1>" +
-                                "<h2><strong>" + objType.charAt(0).toUpperCase() + objType.substring(1).toLowerCase() + " : </strong> " + obj +"</h2>";
+                                "<h2><strong>" + objType.charAt(0).toUpperCase() + objType.substring(1).toLowerCase() + " : </strong> " + obj +"</h2>" +
+                                "<div id= \"form\">";
+
                     if (xmlDoc.getElementsByTagName("prof").length > 0) {
                         string += "<h3>Expérience(s) professionnelle(s)</h3>" +
-                                "<ul>";
+                                "<table id=\"expeTab\" >" +
+                                    "<thead>" +
+                                        "<tr>" +
+                                            "<th>Date</th>" +
+                                            "<th>Description</th>" +
+                                        "</tr>" +
+                                    "</thead>" +
+                                    "<tbody>";
                         for (var i = 0; i < xmlDoc.getElementsByTagName("expe").length; i++) {
                             var lengthExpe = xmlDoc.getElementsByTagName("expe")[i].childNodes.length;
-                            string += "<li>"+ xmlDoc.getElementsByTagName("expe")[i].childNodes[0].textContent;
+                            string += "<tr>" +
+                                        "<td>" + xmlDoc.getElementsByTagName("expe")[i].childNodes[0].textContent;
                             if (lengthExpe == 3) {
-                                string += " au " + xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent + " : " +
-                                         xmlDoc.getElementsByTagName("expe")[i].childNodes[2].textContent +
-                                    "</li>";
+                                string += " au " + xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent + "</td>" +
+                                        "<td>" + xmlDoc.getElementsByTagName("expe")[i].childNodes[2].textContent + "</td>" +
+                                    "</tr>";
                             } else {
-                                string += xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent +
-                                    "</li>";
+                                string += "</td>" +
+                                          "<td>" + xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent + "</td>" +
+                                    "</tr>";
                             }
                         }
-                        string += "</ul>";
+                        string += "</tbody>" +
+                                "</table>";
                     }
                     string += "<h3>Compétences</h3>" +
                                 "<h4>Diplôme(s)</h4>" +
-                                    "<ul>";
+                                "<table id=\"diplTab\" >" +
+                                    "<thead>" +
+                                        "<tr>" +
+                                            "<th>Date</th>" +
+                                            "<th>Intitulé</th>" +
+                                            "<th>Institut</th>" +
+                                        "</tr>" +
+                                    "</thead>" +
+                                    "<tbody>";
                     for (var i = 0; i < xmlDoc.getElementsByTagName("diplome").length; i++) {
-                        string += "<li> " + xmlDoc.getElementsByTagName("diplome")[i].attributes[0].nodeValue + " " +
-                            xmlDoc.getElementsByTagName("diplome")[i].childNodes[1].textContent + " : " +
-                            xmlDoc.getElementsByTagName("diplome")[i].childNodes[0].textContent + ", " +
-                            xmlDoc.getElementsByTagName("diplome")[i].childNodes[2].textContent + "</li>";
+                        string += "<tr>" +
+                                    "<td>" + xmlDoc.getElementsByTagName("diplome")[i].childNodes[0].textContent + "</td>" +
+                                    "<td>" + xmlDoc.getElementsByTagName("diplome")[i].childNodes[1].textContent + "</td>" +
+                                    "<td>" + xmlDoc.getElementsByTagName("diplome")[i].childNodes[2].textContent + "</td>" +
+                                  "</tr>";
                     }
-                    string += "</ul>";
+                    string += "</tbody>" +
+                            "</table>";
                     if (xmlDoc.getElementsByTagName("certif").length > 0) {
                         string += "<h4>Certification(s)</h4>" +
-                                "<ul>";
+                                "<table id=\"certTab\" >" +
+                                    "<thead>" +
+                                        "<tr>" +
+                                            "<th>Date</th>" +
+                                            "<th>Intitulé</th>" +
+                                        "</tr>" +
+                                    "</thead>" +
+                                    "<tbody>";
                         for (var i = 0; i < xmlDoc.getElementsByTagName("certif").length; i++) {
                             var lengthCert = xmlDoc.getElementsByTagName("certif")[i].childNodes.length;
-                            string += "<li>"+ xmlDoc.getElementsByTagName("certif")[i].childNodes[0].textContent;
+                            string += "<tr>" +
+                                        "<td>"+ xmlDoc.getElementsByTagName("certif")[i].childNodes[0].textContent;
                             if (lengthCert == 3) {
-                                string += " au " + xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent + " : " +
-                                         xmlDoc.getElementsByTagName("certif")[i].childNodes[2].textContent +
-                                    "</li>";
+                                string += " au " + xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent + "</td>" +
+                                        "<td>" + xmlDoc.getElementsByTagName("certif")[i].childNodes[2].textContent + "</td>" +
+                                    "</tr>";
                             } else {
-                                string += xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent +
-                                    "</li>";
+                                string += "</td>" +
+                                          "<td>"+xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent + "</td>" +
+                                        "</tr>";
                             }
                         }
-                        string += "</ul>";
+                        string += "</tbody> " +
+                                "</table>";
                     }
                     string += "<h4>Langue(s) vivante(s)</h4>" +
                                 "<ul>";
@@ -127,7 +159,7 @@
                             xmlDoc.getElementsByTagName("lv")[i].attributes[2].nodeValue + "</li>";
                     }
                     string += "</ul>";
-                    string += "<h4>Langage(s) programmation</h4>" +
+                    string += "<h4>Langage(s) de programmation</h4>" +
                             "<ul>";
                     for (var i = 0; i < xmlDoc.getElementsByTagName("langage").length; i++) {
                         string += "<li>"+ xmlDoc.getElementsByTagName("langage")[i].childNodes[0].textContent + " : " +
@@ -153,7 +185,7 @@
                     string = "<br/><br/><p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
                 }
 
-                document.body.innerHTML += string;
+                document.body.innerHTML += string+ "</div>";
             }
         </script>
     </body>

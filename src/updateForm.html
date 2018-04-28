@@ -1,58 +1,172 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"xml:lang="fr"lang="fr">
     <head>
-        <title>Ajout cv</title>
+        <title>Modifier cv</title>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Language" content="fr"/>
         <link href="../resources/CSS/form.css" rel="stylesheet"/>
     </head>
     <body>
         <input type="button" id="buttonBack" value="<" OnClick="back();"/>
-        <h1>Ajout d'un CV</h1>
-        <form method="post" name="addForm" id="addForm" >
-            <fieldset>
-                <legend>Comment souhaitez-vous ajouter votre CV ?</legend>
-                <input type="radio" name="keying" value="file" onchange="changeForm();"/>
-                <label>par fichier CV</label>
-                <input type="radio" name="keying" value="manual" onchange="changeForm();"/>
-                <label>saisie manuelle</label>
-            </fieldset>
+        <h1>Modifier le CV</h1>
+        <form method="post" name="updateForm" id="updateForm" >
             <script>
-                var form = document.getElementById('addForm');
+                var form = document.getElementById('updateForm');
                 var url = sessionStorage.getItem('url');
+                var id = sessionStorage.getItem('id');
+                var expe = 0;
+                var dipl = 0;
+                var cert = 0;
+                var lv = 0;
+                var li = 0;
+                var div = 0;
                 if (url == null) {
                     window.location.href="../index.html";
                 }
-                form.action = url + "/insert";
+                if (id == null) {
+                    window.location.href="../menu.html";
+                }
+                form.action = url + "/update/"+ id;
                 function back() {
                     sessionStorage.clear();
                     sessionStorage.setItem('url', url);
                     window.location.href="./menu.html";
                 }
-                function changeForm() {
-                    var file = document.getElementById('file');
-                    var formDiv = document.getElementById('form');
-                    if (form.keying[1].checked == true) {
-                    	formDiv.style.display = '';
-                        var lastName = document.getElementById('lastName');
-                        lastName.setAttribute("required", "required");
-                        var firstName = document.getElementById('firstName');
-                        firstName.setAttribute("required", "required");
-                        var obj = document.getElementById('obj');
-                        obj.setAttribute("required", "required");
-                    	file.style.display = 'none';
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        myFunction(this);
                     } else {
-                    	formDiv.style.display = 'none';
-                        var lastName = document.getElementById('lastName');
-                        lastName.removeAttribute("required");
-                        var firstName = document.getElementById('firstName');
-                        firstName.removeAttribute("required");
-                        var obj = document.getElementById('obj');
-                        obj.removeAttribute("required");
-                    	file.style.display = '';
+                        //document.body.innerHTML = "<h2> Erreur de connexion vers le serveur : " + this.status + "</h2>";
+                    }
+                };
+                xhttp.open("GET", url + "/resume/" + id, true);
+                xhttp.setRequestHeader('Content-Type', 'application/xml');
+                xhttp.send();
+
+
+                function myFunction(xml) {
+                    var xmlDoc = xml.responseXML;
+                    var string = "";
+                    if (xmlDoc.getElementsByTagName("error").length == 0) {
+                        var lastName =  xmlDoc.getElementsByTagName("nom")[0].childNodes[0].nodeValue;
+                        var firstName =  xmlDoc.getElementsByTagName("prenom")[0].childNodes[0].nodeValue;
+                        var objType = xmlDoc.getElementsByTagName("objectif")[0].childNodes[0].nodeName;
+                        var obj = xmlDoc.getElementsByTagName("objectif")[0].children[0].childNodes[0].nodeValue;
+                        var inputLastName = document.getElementById('lastName');
+                        inputLastName.value = lastName;
+                        var inputFirstName = document.getElementById('firstName');
+                        inputFirstName.value = firstName;
+                        var inputObjectifType = document.getElementById('objType');
+                        inputObjectifType.value = objType;
+                        var inputObj = document.getElementById('obj');
+                        inputObj.value = obj;
+                        if (xmlDoc.getElementsByTagName("prof").length > 0) {
+                            for (var i = 0; i < xmlDoc.getElementsByTagName("expe").length; i++) {
+                                moreExpe();
+                                var divExpe = document.getElementById('expe'+expe);
+                                //dateDebExp
+                                var dateDebExp = xmlDoc.getElementsByTagName("expe")[i].childNodes[0].textContent;
+                                var els = dateDebExp.split("-");
+                        		var jour = els[2].length == 1 ? '0'+ els[2] : els[2];
+                        		var mois = els[1].length == 1 ? '0'+ els[1] : els[1];
+                        		var annee = els[0];
+                                divExpe.children[1].children[1].value = annee+"-"+mois+"-"+jour;
+                                var lengthExpe = xmlDoc.getElementsByTagName("expe")[i].childNodes.length;
+                                if (lengthExpe == 3) {
+                                    //dateFinExp
+                                    divExpe.children[1].children[3].value = xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent;
+                                    var dateFinExp = xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent;
+                                    els = dateFinExp.split("-");
+                                    jour = els[2].length == 1 ? '0'+ els[2] : els[2];
+                            		mois = els[1].length == 1 ? '0'+ els[1] : els[1];
+                            		annee = els[0];
+                                    divExpe.children[1].children[3].value = annee+"-"+mois+"-"+jour;
+                                    //describeExp
+                                    divExpe.children[2].children[0].value = xmlDoc.getElementsByTagName("expe")[i].childNodes[2].textContent;
+                                } else {
+                                    //describeExp
+                                    divExpe.children[2].children[0].value = xmlDoc.getElementsByTagName("expe")[i].childNodes[1].textContent;
+                                }
+                            }
+                        }
+                        for (var i = 0; i < xmlDoc.getElementsByTagName("diplome").length; i++) {
+                            moreDipl();
+                            var divDipl = document.getElementById('dipl'+dipl);
+                            //nvDip
+                            divDipl.children[1].children[1].value = xmlDoc.getElementsByTagName("diplome")[i].attributes[0].nodeValue;
+                            //dateDiplome
+                            var dateDiplome = xmlDoc.getElementsByTagName("diplome")[i].childNodes[0].textContent;
+                            var els = dateDebExp.split("-");
+                            var jour = els[2].length == 1 ? '0'+ els[2] : els[2];
+                            var mois = els[1].length == 1 ? '0'+ els[1] : els[1];
+                            var annee = els[0];
+                            divDipl.children[1].children[3].value = annee+"-"+mois+"-"+jour;
+                            //describeDip
+                            divDipl.children[2].children[1].value = xmlDoc.getElementsByTagName("diplome")[i].childNodes[1].textContent;
+                            //institutDip
+                            divDipl.children[3].children[1].value = xmlDoc.getElementsByTagName("diplome")[i].childNodes[2].textContent;
+                        }
+                        if (xmlDoc.getElementsByTagName("certif").length > 0) {
+                            for (var i = 0; i < xmlDoc.getElementsByTagName("certif").length; i++) {
+                                moreCert();
+                                var divCert = document.getElementById('cert'+cert);
+                                //dateDebCert
+                                var dateDebCert = xmlDoc.getElementsByTagName("certif")[i].childNodes[0].textContent;
+                                var els = dateDebCert.split("-");
+                                var jour = els[2].length == 1 ? '0'+ els[2] : els[2];
+                        		var mois = els[1].length == 1 ? '0'+ els[1] : els[1];
+                        		var annee = els[0];
+                                divCert.children[1].children[1].value = annee+"-"+mois+"-"+jour;
+                                var lengthCert = xmlDoc.getElementsByTagName("certif")[i].childNodes.length;
+                                if (lengthCert == 3) {
+                                    //dateFinCert
+                                    divCert.children[1].children[3].value = xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent;
+                                    var dateFinCert = xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent;
+                                    els = dateFinCert.split("-");
+                                    jour = els[2].length == 1 ? '0'+ els[2] : els[2];
+                            		mois = els[1].length == 1 ? '0'+ els[1] : els[1];
+                            		annee = els[0];
+                                    divCert.children[1].children[3].value = annee+"-"+mois+"-"+jour;
+                                    //describeCert
+                                    divCert.children[2].children[0].value = xmlDoc.getElementsByTagName("certif")[i].childNodes[2].textContent;
+                                } else {
+                                    //describeCert
+                                    divCert.children[2].children[0].value = xmlDoc.getElementsByTagName("certif")[i].childNodes[1].textContent;
+                                }
+                            }
+                        }
+
+                        for (var i = 0; i < xmlDoc.getElementsByTagName("lv").length; i++) {
+                            moreLv();
+                            var divLv = document.getElementById('lv'+lv);
+                            divLv.children[1].children[1].value = xmlDoc.getElementsByTagName("lv")[i].attributes[0].nodeValue;
+                            divLv.children[1].children[3].value = xmlDoc.getElementsByTagName("lv")[i].attributes[1].nodeValue;
+                            if (xmlDoc.getElementsByTagName("lv")[i].attributes[1].nodeValue == "TOEIC") {
+                                divLv.children[2].children[3].value = xmlDoc.getElementsByTagName("lv")[i].attributes[2].nodeValue;
+                            } else {
+                                divLv.children[2].children[1].value = xmlDoc.getElementsByTagName("lv")[i].attributes[2].nodeValue;
+                            }
+                        }
+
+                        for (var i = 0; i < xmlDoc.getElementsByTagName("langage").length; i++) {
+                            moreLi();
+                            var divLi = document.getElementById('li'+li);
+                            divLi.children[1].children[1].value = xmlDoc.getElementsByTagName("langage")[i].childNodes[0].textContent;
+                            divLi.children[1].children[3].value = xmlDoc.getElementsByTagName("langage")[i].childNodes[1].textContent;
+                        }
+
+                        if (xmlDoc.getElementsByTagName("divers").length > 0) {
+                            moreDiv();
+                            var divDiv = document.getElementById('div'+div);
+                            for (var i = 0; i < xmlDoc.getElementsByTagName("divers").length; i++) {
+                                divDiv.children[1].children[0].value = xmlDoc.getElementsByTagName("divers")[i].childNodes[0].textContent;
+                            }
+                        }
                     }
                 }
-                var expe = 0;
+
                 function moreExpe() {
                     expe++;
                     var newExpe = document.getElementById('expe').cloneNode(true);
@@ -71,7 +185,7 @@
                     var insertHere = document.getElementById('expe').parentNode;
                     insertHere.insertBefore(newExpe, null);
                 }
-                var dipl = 0;
+
                 function moreDipl() {
                     dipl++;
                     var newDipl = document.getElementById('dipl').cloneNode(true);
@@ -92,7 +206,7 @@
                     var insertHere = document.getElementById('dipl').parentNode;
                     insertHere.insertBefore(newDipl, null);
                 }
-                var cert = 0;
+
                 function moreCert() {
                     cert++;
                     var newCert = document.getElementById('cert').cloneNode(true);
@@ -111,7 +225,7 @@
                     var insertHere = document.getElementById('cert').parentNode;
                     insertHere.insertBefore(newCert, null);
                 }
-                var lv = 0;
+
                 function moreLv() {
                     lv++;
                     var newLv = document.getElementById('lv').cloneNode(true);
@@ -130,7 +244,7 @@
                     var insertHere = document.getElementById('lv').parentNode;
                     insertHere.insertBefore(newLv, null);
                 }
-                var li = 0;
+
                 function moreLi() {
                     li++;
                     var newLi = document.getElementById('li').cloneNode(true);
@@ -150,7 +264,7 @@
                     var insertHere = document.getElementById('li').parentNode;
                     insertHere.insertBefore(newLi, null);
                 }
-                var div = 0;
+
                 function moreDiv() {
                     div++;
                     var newDiv = document.getElementById('div').cloneNode(true);
@@ -173,19 +287,19 @@
 					}
 				}
             </script>
-            <div id="form" style="display:none">
+            <div id="form" >
                 <h2>Identité</h2>
                 <p>
-                    <label>Nom : </label><input type="text" name="lastName" id="lastName" size="35"/>
-                    <label>Prénom : </label><input type="text" name="firstName" id="firstName" size="35"/>
+                    <label>Nom : </label><input type="text" name="lastName" size="35" id="lastName" required/>
+                    <label>Prénom : </label><input type="text" name="firstName" size="35" id="firstName" required/>
                 </p>
                 <h2>Objectif</h2>
                 <p>
-                    <select name="obj">
+                    <select name="obj" id="objType">
                         <option value="stage">stage</option>
                         <option value="emploi">emploi</option>
                     </select>
-                    <input type="text"name="descript" placeholder="intitulé du stage / désignation du poste demandé" size="100" id="obj"/>
+                    <input type="text" name="descript" placeholder="intitulé du stage / désignation du poste demandé" size="100" id="obj" required/>
                 </p>
                 <div name="prof"id="prof">
                     <h2>Expérience(s) professionelle(s)<input type="button" class="buttonAdd" value="+" onclick="moreExpe();"></h2>
@@ -232,7 +346,7 @@
                             <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                             <p>
                                 <label>Date début : </label><input type="date" name="dateDebCert" value="YYYY-MM-DD" onblur="verifDate(this)"/>
-                                <label>Date fin : </label><input type="text" name="dateFinCert" value="YYYY-MM-DD" onblur="verifDate(this)"/>
+                                <label>Date fin : </label><input type="date" name="dateFinCert" value="YYYY-MM-DD" onblur="verifDate(this)"/>
                             </p>
                             <p>
                                 <textarea rows="4" placeholder="description de la formation..." name="describeCert"></textarea>
@@ -288,12 +402,6 @@
                         </div>
                     </div>
                 </div>
-            <div id="file" style="display:none">
-                <br/>
-                <label>Sélectionner le fichier à envoyer</label>
-                <input type="file" name="file">
-                <br/>
-            </div>
             <br/>
         <input type="submit" value="Ajouter le CV"/>
     </form>

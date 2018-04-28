@@ -42,6 +42,17 @@
                                 xhttp.send();
                             }
                         break;
+                        case "update" :
+                            var xhttp = new XMLHttpRequest();
+                            url = sessionStorage.getItem('url');
+                            xhttp.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    updateCV(this, id);
+                                }
+                            };
+                            xhttp.open("GET", url + "/resume/"+ id, true);
+                            xhttp.send();
+                        break;
                         default:
                         break;
                     }
@@ -69,12 +80,22 @@
                     document.body.innerHTML = string;
                 }
             }
+            function updateCV(xml, id) {
+                var xmlDoc = xml.responseXML;
+                if (xmlDoc.getElementsByTagName("error").length == 0) {
+                    sessionStorage.setItem('id', id);
+                    window.location.href="./updateForm.html";
+                } else {
+                    var string = "<p><strong>Erreur</strong> "+ xmlDoc.getElementsByTagName("error")[0].childNodes[0].nodeValue+"</p>";
+                    document.body.innerHTML = string;
+                }
+            }
         </script>
         <div class="menu">
           <a href="./listCV.html">Liste des CVs</a>
           <a href="./addForm.html">Ajout d'un CV</a>
           <a onclick="saisie('resume');" >Détail d'un CV</a>
-          <a href="#">Mise à jour d'un CV</a>
+          <a onclick="saisie('update');">Mise à jour d'un CV</a>
           <a onclick="saisie('delete');">Suppression d'un CV</a>
         </div>
     </body>
