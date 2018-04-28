@@ -14,7 +14,7 @@
           var url = document.getElementById('url').value;
           document.body.innerHTML = "";
           sessionStorage.setItem('url', url);
-          window.location.href = './src/menu.html';
+          document.location.replace('./src/menu.html');
       }
 	  </script>
 	  <h1>Configuration du servieur REST</h1>

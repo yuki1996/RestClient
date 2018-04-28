@@ -25,8 +25,6 @@
                 }
                 form.action = url + "/insert";
                 function back() {
-                    sessionStorage.clear();
-                    sessionStorage.setItem('url', url);
                     window.location.href="./menu.html";
                 }
                 function changeForm() {
@@ -89,7 +87,7 @@
                     for (var i = 0; i < newCert.length; i++) {
                         var theName = newCert[i].name;
                         if (theName) {
-                            newCert[i].name = theName + dipl;
+                            newCert[i].name = theName + cert;
                         }
                     }
                     //dateDebCert mis en required
@@ -156,15 +154,10 @@
                     insertHere.insertBefore(newDiv, null);
                 }
                 function verifDate(champ) {
-	                if (champ.value == "") {
-                        champ.value = "yyyy-mm-jj";
-					}
-				}
-				function verifDescrip(champ) {
-					if (champ.value == "") {
-						champ.value = "yyyy-mm-jj";
-					}
-				}
+			if (champ.value == "") {
+				champ.value = "YYYY-MM-DD";
+			}
+		}
             </script>
             <div id="form" style="display:none">
                 <h2>Identité</h2>
@@ -186,7 +179,7 @@
                         <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                         <p>
                             <label>Date début : </label><input type="date" name="dateDebExp" value="yyyy-MM-dd" onblur="verifDate(this)"/>
-                            <label>Date fin : </label><input type="date" name="dateFinExp" value="yyyy-MM-dd" onblur="verifDate(this)"/>
+                            <label>Date fin : </label><input type="text" name="dateFinExp" value="YYYY-MM-DD" onblur="verifDate(this)"/>
                         </p>
                         <p>
                             <textarea rows="4" placeholder="description de l'expérience..." name="decribeExp"></textarea>
@@ -207,6 +200,7 @@
                                     <option value="III">BTS, DUT</option>
                                     <option value="II">Bac+3 (licence), Bac+4 (Master)</option>
                                     <option value="I">Master, Diplôme ingénieur, Doctorat</option>
+
                                 </select>
                                 <label>Date d'obtention : </label><input type="date" name="dateDip" value="yyyy-MM-dd" onblur="verifDate(this)"/>
                             </p>
@@ -225,7 +219,7 @@
                             <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                             <p>
                                 <label>Date début : </label><input type="date" name="dateDebCert" value="yyyy-MM-dd" onblur="verifDate(this)"/>
-                                <label>Date fin : </label><input type="date" name="dateFinCert" value="yyyy-MM-dd" onblur="verifDate(this)"/>
+                                <label>Date fin : </label><input type="text" name="dateFinCert" value="YYYY-MM-DD" onblur="verifDate(this)"/>
                             </p>
                             <p>
                                 <textarea rows="4" placeholder="description de la formation..." name="describeCert"></textarea>

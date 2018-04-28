@@ -15,7 +15,6 @@ h1 {
     	margin: 4px 2px;
     	cursor: pointer;
     	border-radius: 50%;
-		font-size: 25px;
 }
 
 #buttonBack {
@@ -29,7 +28,6 @@ h1 {
    cursor: pointer;
    border-radius: 50%;
    background-color: #4B403E;
-   font-size: 25px;
 }
 
 .buttonLess {
