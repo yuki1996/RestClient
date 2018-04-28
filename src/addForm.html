@@ -89,7 +89,7 @@
                     for (var i = 0; i < newCert.length; i++) {
                         var theName = newCert[i].name;
                         if (theName) {
-                            newCert[i].name = theName + dipl;
+                            newCert[i].name = theName + cert;
                         }
                     }
                     //dateDebCert mis en required
@@ -157,12 +157,7 @@
                 }
                 function verifDate(champ) {
 	                if (champ.value == "") {
-                        champ.value = "yyyy-mm-jj";
-					}
-				}
-				function verifDescrip(champ) {
-					if (champ.value == "") {
-						champ.value = "yyyy-mm-jj";
+                        champ.value = "YYYY-MM-DD";
 					}
 				}
             </script>
@@ -185,8 +180,8 @@
                     <div name="expe" id="expe" style="display:none" class="expe">
                         <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                         <p>
-                            <label>Date début : </label><input type="date" name="dateDebExp" value="yyyy-MM-dd" onblur="verifDate(this)"/>
-                            <label>Date fin : </label><input type="date" name="dateFinExp" value="yyyy-MM-dd" onblur="verifDate(this)"/>
+                            <label>Date début : </label><input type="date" name="dateDebExp" value="YYYY-MM-DD" onblur="verifDate(this)"/>
+                            <label>Date fin : </label><input type="text" name="dateFinExp" value="YYYY-MM-DD" onblur="verifDate(this)"/>
                         </p>
                         <p>
                             <textarea rows="4" placeholder="description de l'expérience..." name="decribeExp"></textarea>
@@ -224,8 +219,8 @@
                         <div name="cert" id="cert" style="display:none" class="cert">
                             <input type="button" class="buttonLess" value="-" onclick="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                             <p>
-                                <label>Date début : </label><input type="date" name="dateDebCert" value="yyyy-MM-dd" onblur="verifDate(this)"/>
-                                <label>Date fin : </label><input type="date" name="dateFinCert" value="yyyy-MM-dd" onblur="verifDate(this)"/>
+                                <label>Date début : </label><input type="date" name="dateDebCert" value="YYYY-MM-DD" onblur="verifDate(this)"/>
+                                <label>Date fin : </label><input type="text" name="dateFinCert" value="YYYY-MM-DD" onblur="verifDate(this)"/>
                             </p>
                             <p>
                                 <textarea rows="4" placeholder="description de la formation..." name="describeCert"></textarea>
